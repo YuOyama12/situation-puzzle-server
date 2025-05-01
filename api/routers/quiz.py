@@ -1,10 +1,15 @@
 from typing import List
-from fastapi import APIRouter
+from data.database.db import get_db
+from sqlalchemy.ext.asyncio import AsyncSession
+from fastapi import APIRouter, Depends
 from api.schemas.quiz import *
-from api.schemas.result_response import * 
+from api.schemas.result_response import *
+from usecase.quiz_use_case import QuizUseCase 
 
 
 router = APIRouter()
+
+quiz_use_case = QuizUseCase()
 
 API_QUIZ_TAG = "quiz" 
 
@@ -36,6 +41,12 @@ async def get_quizzes():
         description = "問題投稿API"
     )
 async def post_quiz(
-    request_body: PostQuiz
+    request_body: PostQuiz,
+    db: AsyncSession = Depends(get_db)
 ):
-    return ResultResponse(code=200, message="OK")
+    result = await quiz_use_case.post_quiz(request_body, db = db)
+
+    if result is not None:
+        return ResultResponse(code=200, message="OK")
+    else:
+        return ResultResponse(code=500, message="Post Failed")
