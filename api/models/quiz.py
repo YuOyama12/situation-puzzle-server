@@ -7,7 +7,7 @@ import uuid
 class Quiz(Base, TimestampMixin):
     __tablename__ = "quizzes"
 
-    id = Column(String(36), primary_key=True, default=str(uuid.uuid4))
+    id = Column(String(36), primary_key=True, default=uuid.uuid4)
     title = Column(String(24))
     question = Column(Text)
     answer = Column(Text)

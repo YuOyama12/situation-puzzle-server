@@ -1,20 +1,20 @@
+from domain.utils import get_datetime_as_jst
 from sqlalchemy import Column, DateTime
 from sqlalchemy.ext.declarative import declared_attr
-from datetime import datetime
 
 class TimestampMixin(object):
     @declared_attr
     def created_at(cls):
-        return Column(DateTime, default=datetime.now(), nullable=False)
+        return Column(DateTime, default=get_datetime_as_jst(), nullable=False)
 
     @declared_attr
     def updated_at(cls):
         return Column(
-            DateTime, default=datetime.now(), onupdate=datetime.now(), nullable=False
+            DateTime, default=get_datetime_as_jst(), onupdate=get_datetime_as_jst(), nullable=False
         )
     
     @declared_attr
     def deleted_at(cls):
         return Column(
-            DateTime, onupdate=datetime.now(), nullable=True
+            DateTime, onupdate=get_datetime_as_jst(), nullable=True
         )
