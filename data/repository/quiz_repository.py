@@ -5,6 +5,17 @@ from sqlalchemy.future import select
 from api.models.quiz import Quiz
 
 class QuizRepository:
+    async def fetch_quiz_by_id(
+        self,
+        id: str,
+        db: AsyncSession,
+    ) -> Optional['Quiz']:
+        result = await db.execute(
+            select(Quiz).filter(Quiz.id == id, Quiz.deleted_at.is_(None))
+        )
+        return result.scalar_one_or_none()
+         
+
     async def fetch_all_quizzes(
         self,
         db: AsyncSession,

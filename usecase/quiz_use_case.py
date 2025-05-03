@@ -7,6 +7,9 @@ from data.repository.quiz_repository import QuizRepository
 
 
 class QuizUseCase:
+    async def fetch_quiz_by_id(self, id: str, db: AsyncSession) -> Optional[Quiz]:
+        return await QuizRepository().fetch_quiz_by_id(id = id, db = db)
+
     async def fetch_quizzes(self, db: AsyncSession) -> List[Quiz]:
         return await QuizRepository().fetch_all_quizzes(db = db)
 
