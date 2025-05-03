@@ -35,7 +35,7 @@ async def get_quizzes(
     return result
 
 @router.get(
-        "/quiz/{quiz_id}",
+        "/quizzes/{quiz_id}",
         response_model = Quiz,
         tags = [API_QUIZ_TAG],
         description = "問題取得API",
