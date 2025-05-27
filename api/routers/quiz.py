@@ -1,7 +1,7 @@
 from typing import List
 from data.database.db import get_db
 from sqlalchemy.ext.asyncio import AsyncSession
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends
 from api.schemas.quiz import *
 from api.schemas.result_response import *
 from usecase.quiz_use_case import QuizUseCase 
@@ -35,7 +35,7 @@ async def get_quizzes(
     return result
 
 @router.get(
-        "/quiz/{quiz_id}",
+        "/quizzes/{quiz_id}",
         response_model = Quiz,
         tags = [API_QUIZ_TAG],
         description = "問題取得API",
@@ -45,10 +45,6 @@ async def get_quiz(
     db: AsyncSession = Depends(get_db)
 ):
     result = await quiz_use_case.fetch_quiz_by_id(id = quiz_id, db = db)
-
-    if result is None:
-        raise HTTPException(status_code=404, detail="quiz_not_found")
-    
     return result
 
 

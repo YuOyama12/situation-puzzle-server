@@ -2,6 +2,7 @@
 from typing import List, Optional
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
+from fastapi import HTTPException
 from api.models.quiz import Quiz
 
 class QuizRepository:
@@ -13,8 +14,12 @@ class QuizRepository:
         result = await db.execute(
             select(Quiz).filter(Quiz.id == id, Quiz.deleted_at.is_(None))
         )
-        return result.scalar_one_or_none()
+        quiz = result.scalar_one_or_none()
+
+        if quiz is None:
+            raise HTTPException(status_code=404, detail="該当する問題が見つかりませんでした。")
          
+        return quiz
 
     async def fetch_all_quizzes(
         self,
