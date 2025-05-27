@@ -12,6 +12,9 @@ class QuizUseCase:
 
     async def fetch_quizzes(self, db: AsyncSession) -> List[Quiz]:
         return await QuizRepository().fetch_all_quizzes(db = db)
+    
+    async def fetch_new_arrived_quizzes(self, db: AsyncSession) -> List[Quiz]:
+        return await QuizRepository().fetch_new_arrived_quizzes(db=db)
 
     async def post_quiz(self, request: PostQuiz, db: AsyncSession) -> Optional[Quiz]:
         quiz_repository = QuizRepository()
