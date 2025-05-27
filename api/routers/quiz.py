@@ -35,6 +35,18 @@ async def get_quizzes(
     return result
 
 @router.get(
+        "/quizzes/new_arrivals",
+        response_model = List[Quiz],
+        tags = [API_QUIZ_TAG],
+        description = "新着問題取得API"
+    )
+async def get_new_arrived_quizzes(
+    db: AsyncSession = Depends(get_db)
+):
+    result = await quiz_use_case.fetch_new_arrived_quizzes(db)
+    return result
+
+@router.get(
         "/quizzes/{quiz_id}",
         response_model = Quiz,
         tags = [API_QUIZ_TAG],
