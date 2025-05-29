@@ -1,6 +1,5 @@
 
 from typing import List, Optional
-from domain.constants import MAX_QUIZ_COUNT_AS_NEW_ARRIVAL
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from fastapi import HTTPException
@@ -32,18 +31,6 @@ class QuizRepository:
         quizzes = result.scalars().all()
 
         return quizzes
-    
-    async def fetch_new_arrived_quizzes(
-        self,
-        db: AsyncSession,
-    ) -> List['Quiz']:
-        quizzes = await self.fetch_all_quizzes(db=db)
-        if not quizzes:
-            return []
-        
-        sorted_quizzes = sorted(quizzes, key=lambda quiz: quiz.created_at, reverse=True)
-
-        return sorted_quizzes[0:MAX_QUIZ_COUNT_AS_NEW_ARRIVAL]
 
     async def create_quiz(
         self,
