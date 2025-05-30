@@ -1,16 +1,29 @@
 
 from typing import Optional
+
+from fastapi import HTTPException
 from api.models.user import User
+from api.schemas.auth import LoginRequest
 from data.repository.auth_repository import AuthRepository
 from sqlalchemy.ext.asyncio import AsyncSession
 import bcrypt
+from domain.constants import ErrorMessages
 
 class AuthUseCase:
     async def login(
         self,
         db: AsyncSession,
-    ):
-        pass
+        request: LoginRequest
+    ) -> 'User':
+        user = await AuthRepository().fetch_user_by_name(db=db, user_name=request.user_name)
+        print(f"testtest::ユーザー存在チェック::{user is None}")
+        if (
+            user is None 
+            or not self._check_password(request.password, user.password)
+        ):
+            raise HTTPException(status_code=401, detail=ErrorMessages.LOGIN_FAILED)
+        
+        return user
 
     async def create_user(
         self,
@@ -22,6 +35,9 @@ class AuthUseCase:
         hashed_password = self._hash_password(password)
         user = User(name=user_name, nickname=nickname, password=hashed_password)
         return await AuthRepository().create_user(db=db, user=user)
+    
+    def decide_display_name(self, user: User):
+        return user.name if not user.nickname else user.nickname
 
     def _hash_password(self, password: str) -> bytes:
         return bcrypt.hashpw(password.encode(), bcrypt.gensalt())

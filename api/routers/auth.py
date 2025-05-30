@@ -15,7 +15,7 @@ API_AUTH_TAG = "auth"
 
 @router.post(
         "/login",
-        response_model = ResultResponse,
+        response_model = AuthResponse,
         tags = [API_AUTH_TAG],
         description = "ログインAPI"
     )
@@ -23,7 +23,14 @@ async def login(
     request_body: LoginRequest,
     db: AsyncSession = Depends(get_db)
 ):
-    return ResultResponse(code=200, message="てすと")
+    result = await auth_use_case.login(
+        db=db,
+        request=request_body,
+    )
+
+    display_name: str = auth_use_case.decide_display_name(result)
+
+    return AuthResponse(user_id= result.id, display_name= display_name)
 
 @router.post(
         "/signup",
@@ -42,6 +49,6 @@ async def register_account(
         nickname= request_body.nickname,
     )
 
-    display_name: str = result.name if not result.nickname else result.nickname
+    display_name: str = auth_use_case.decide_display_name(result)
 
     return AuthResponse(user_id= result.id, display_name= display_name)

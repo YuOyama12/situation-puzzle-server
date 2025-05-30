@@ -1,4 +1,6 @@
 
+from typing import Optional
+from sqlalchemy import select
 from api.models.user import User
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import HTTPException
@@ -21,8 +23,13 @@ class AuthRepository:
             raise e
              
 
-    async def login(
+    async def fetch_user_by_name(
         self,
         db: AsyncSession,
-    ):
-        pass
+        user_name: str,
+    ) -> Optional['User']:
+        result = await db.execute(
+            select(User).filter(User.name == user_name, User.deleted_at.is_(None))
+        )
+        
+        return result.scalar_one_or_none()
