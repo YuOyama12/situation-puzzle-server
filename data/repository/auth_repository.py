@@ -10,7 +10,7 @@ class AuthRepository:
         self,
         db: AsyncSession,
         user: User,
-    ) -> 'User' :
+    ) -> User :
         try:
             db.add(user)
             await db.commit()
@@ -27,7 +27,7 @@ class AuthRepository:
         self,
         db: AsyncSession,
         user_name: str,
-    ) -> Optional['User']:
+    ) -> Optional[User]:
         result = await db.execute(
             select(User).filter(User.name == user_name, User.deleted_at.is_(None))
         )

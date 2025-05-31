@@ -1,36 +1,52 @@
 
 from typing import List, Optional
+from sqlalchemy import asc, desc
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from fastapi import HTTPException
 from api.models.quiz import Quiz
+from domain.constants import ErrorMessages
 
 class QuizRepository:
     async def fetch_quiz_by_id(
         self,
         id: str,
         db: AsyncSession,
-    ) -> Optional['Quiz']:
+    ) -> Optional[Quiz]:
         result = await db.execute(
             select(Quiz).filter(Quiz.id == id, Quiz.deleted_at.is_(None))
         )
         quiz = result.scalar_one_or_none()
 
         if quiz is None:
-            raise HTTPException(status_code=404, detail="該当する問題が見つかりませんでした。")
+            raise HTTPException(status_code=404, detail=ErrorMessages.QUIZ_NOT_FOUND)
          
         return quiz
 
     async def fetch_all_quizzes(
         self,
         db: AsyncSession,
-    ) -> List['Quiz']:
+    ) -> List[Quiz]:
         result = await db.execute(
             select(Quiz).filter(Quiz.deleted_at.is_(None))
         )
         quizzes = result.scalars().all()
 
         return quizzes
+    
+    async def fetch_new_arrived_quizzes(
+        self,
+        db: AsyncSession,
+        quiz_count: int
+    ) -> List[Quiz]:
+        result = await db.execute(
+            select(Quiz)
+            .filter(Quiz.deleted_at.is_(None))
+            .order_by(desc(Quiz.created_at))
+            .limit(quiz_count)
+        )
+
+        return result.scalars().all()
 
     async def create_quiz(
         self,
