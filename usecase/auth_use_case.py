@@ -12,7 +12,7 @@ class AuthUseCase:
         self,
         db: AsyncSession,
         request: LoginRequest
-    ) -> 'User':
+    ) -> User:
         user = await AuthRepository().fetch_user_by_name(db=db, user_name=request.user_name)
         if (
             user is None 
@@ -28,7 +28,7 @@ class AuthUseCase:
         user_name: str,
         password: str,
         nickname: str,
-    ) -> 'User':
+    ) -> User:
         same_user_name_exists = await self._check_if_user_name_exists(db=db, user_name=user_name)
 
         if same_user_name_exists:

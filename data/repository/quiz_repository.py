@@ -10,7 +10,7 @@ class QuizRepository:
         self,
         id: str,
         db: AsyncSession,
-    ) -> Optional['Quiz']:
+    ) -> Optional[Quiz]:
         result = await db.execute(
             select(Quiz).filter(Quiz.id == id, Quiz.deleted_at.is_(None))
         )
@@ -24,7 +24,7 @@ class QuizRepository:
     async def fetch_all_quizzes(
         self,
         db: AsyncSession,
-    ) -> List['Quiz']:
+    ) -> List[Quiz]:
         result = await db.execute(
             select(Quiz).filter(Quiz.deleted_at.is_(None))
         )
