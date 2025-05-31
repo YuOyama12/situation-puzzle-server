@@ -4,6 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from fastapi import HTTPException
 from api.models.quiz import Quiz
+from domain.constants import ErrorMessages
 
 class QuizRepository:
     async def fetch_quiz_by_id(
@@ -17,7 +18,7 @@ class QuizRepository:
         quiz = result.scalar_one_or_none()
 
         if quiz is None:
-            raise HTTPException(status_code=404, detail="該当する問題が見つかりませんでした。")
+            raise HTTPException(status_code=404, detail=ErrorMessages.QUIZ_NOT_FOUND)
          
         return quiz
 
