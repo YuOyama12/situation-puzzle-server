@@ -8,12 +8,15 @@ import bcrypt
 from domain.constants import ErrorMessages
 
 class AuthUseCase:
+    def __init__(self):
+        self.auth_repository = AuthRepository()
+
     async def login(
         self,
         db: AsyncSession,
         request: LoginRequest
     ) -> User:
-        user = await AuthRepository().fetch_user_by_name(db=db, user_name=request.user_name)
+        user = await self.auth_repository.fetch_user_by_name(db=db, user_name=request.user_name)
         if (
             user is None 
             or not self._check_password(request.password, user.password)
@@ -36,7 +39,7 @@ class AuthUseCase:
 
         hashed_password = self._hash_password(password)
         user = User(name=user_name, nickname=nickname, password=hashed_password)
-        return await AuthRepository().create_user(db=db, user=user)
+        return await self.auth_repository.create_user(db=db, user=user)
     
     def decide_display_name(self, user: User):
         return user.name if not user.nickname else user.nickname
@@ -46,7 +49,7 @@ class AuthUseCase:
         db: AsyncSession,
         user_name: str
     ) -> bool:
-        user = await AuthRepository().fetch_user_by_name(db=db, user_name=user_name)
+        user = await self.auth_repository.fetch_user_by_name(db=db, user_name=user_name)
         return user is not None
 
     def _hash_password(self, password: str) -> bytes:
