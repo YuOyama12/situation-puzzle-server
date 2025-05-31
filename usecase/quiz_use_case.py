@@ -17,13 +17,15 @@ class QuizUseCase:
         return await self.quiz_repository.fetch_all_quizzes(db = db)
     
     async def fetch_new_arrived_quizzes(self, db: AsyncSession) -> List[Quiz]:
-        quizzes = await self.quiz_repository.fetch_all_quizzes(db=db)
+        quizzes = await self.quiz_repository.fetch_new_arrived_quizzes(
+            db=db,
+            quiz_count=MAX_QUIZ_COUNT_AS_NEW_ARRIVAL
+        )
+        
         if not quizzes:
             return []
         
-        sorted_quizzes = sorted(quizzes, key=lambda quiz: quiz.created_at, reverse=True)
-
-        return sorted_quizzes[0:MAX_QUIZ_COUNT_AS_NEW_ARRIVAL]
+        return quizzes
 
     async def post_quiz(self, request: PostQuiz, db: AsyncSession) -> Optional[Quiz]:
         quiz = Quiz(

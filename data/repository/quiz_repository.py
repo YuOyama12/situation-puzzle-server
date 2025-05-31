@@ -1,5 +1,6 @@
 
 from typing import List, Optional
+from sqlalchemy import asc, desc
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from fastapi import HTTPException
@@ -32,6 +33,20 @@ class QuizRepository:
         quizzes = result.scalars().all()
 
         return quizzes
+    
+    async def fetch_new_arrived_quizzes(
+        self,
+        db: AsyncSession,
+        quiz_count: int
+    ) -> List[Quiz]:
+        result = await db.execute(
+            select(Quiz)
+            .filter(Quiz.deleted_at.is_(None))
+            .order_by(desc(Quiz.created_at))
+            .limit(quiz_count)
+        )
+
+        return result.scalars().all()
 
     async def create_quiz(
         self,
