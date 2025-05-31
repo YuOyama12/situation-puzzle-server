@@ -1,6 +1,4 @@
 
-from typing import Optional
-
 from fastapi import HTTPException
 from api.models.user import User
 from api.schemas.auth import LoginRequest
@@ -16,7 +14,6 @@ class AuthUseCase:
         request: LoginRequest
     ) -> 'User':
         user = await AuthRepository().fetch_user_by_name(db=db, user_name=request.user_name)
-        print(f"testtest::ユーザー存在チェック::{user is None}")
         if (
             user is None 
             or not self._check_password(request.password, user.password)
@@ -32,12 +29,25 @@ class AuthUseCase:
         password: str,
         nickname: str,
     ) -> 'User':
+        same_user_name_exists = await self._check_if_user_name_exists(db=db, user_name=user_name)
+
+        if same_user_name_exists:
+            raise HTTPException(status_code=400, detail=ErrorMessages.USER_NAME_DUPLICATION)
+
         hashed_password = self._hash_password(password)
         user = User(name=user_name, nickname=nickname, password=hashed_password)
         return await AuthRepository().create_user(db=db, user=user)
     
     def decide_display_name(self, user: User):
         return user.name if not user.nickname else user.nickname
+    
+    async def _check_if_user_name_exists(
+        self,
+        db: AsyncSession,
+        user_name: str
+    ) -> bool:
+        user = await AuthRepository().fetch_user_by_name(db=db, user_name=user_name)
+        return user is not None
 
     def _hash_password(self, password: str) -> bytes:
         return bcrypt.hashpw(password.encode(), bcrypt.gensalt())
