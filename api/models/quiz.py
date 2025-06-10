@@ -1,4 +1,4 @@
-from api.models.core import TimestampMixin
+from .core import TimestampMixin
 from sqlalchemy import Column, String, Text
 from data.database.db import Base
 
