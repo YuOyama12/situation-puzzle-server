@@ -4,7 +4,7 @@ from sqlalchemy import asc, desc
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from fastapi import HTTPException
-from api.models.quiz import Quiz
+from data.database.tables.quiz import Quiz
 from domain.constants import ErrorMessages
 
 class QuizRepository:
