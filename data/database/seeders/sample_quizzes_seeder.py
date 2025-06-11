@@ -1,18 +1,16 @@
-from api.models.quiz import Quiz
-from api.models.user import User
-from sqlalchemy.orm import sessionmaker
-from api.settings import DB_URL
 from sqlalchemy import create_engine
-from data.database.db import Base
+from sqlalchemy.orm import sessionmaker
+
+from api.settings import DB_URL
+from data.database.tables.quiz import Quiz
 
 engine = create_engine(DB_URL, echo=True)
 SessionLocal = sessionmaker(bind=engine)
 
-def reset_database():
-    Base.metadata.drop_all(bind=engine)
-    Base.metadata.create_all(bind=engine)
-
-def insert_sample_quizzes():
+def execute():
+    """
+    quizzesテーブル内にサンプル用の問題を追加する
+    """
     session = SessionLocal()
 
     try:
@@ -38,17 +36,18 @@ def insert_sample_quizzes():
                 question = "ある男は何かを完成させようと作業をしていた。いつも完成させることはできるのだが、完成したらすぐに壊してしまう。完成したものは完璧だ。気に入らなかったわけではない。\nどういう状況？",
                 answer = "男はルービックキューブをしていた。\n完成したらすぐに壊して何度も完成させ、完成までのタイム短縮の努力をしていたのだ。",
             ),
+            Quiz(
+                title = "ロボット発明家",
+                question = "ロボット発明で有名な発明家がいた。彼は7体のロボットを開発した。\n最新ロボットの発表会を終えた彼は、プライベートの時間を過ごしていた。\nすると彼は「あなたはロボットか？」と確認された上に、証明するためのテストまでやらされた。彼は顔写真付きの免許証を持っているし、ワイドショーにも出演して顔を知られているにも関わらずだ。\nどういう状況？",
+                answer = "とある通販サイトにログインしようとしてCAPTCHA認証の中でロボットかどうかを確認された。",
+            ),
         ]
 
         session.add_all(quizzes)
         session.flush()
         session.commit()
-        print("Seeding completed successfully!")
+        print("Inserting sample quizzes was completed successfully!")    
     except:
         session.rollback()
     finally:
         session.close()
-
-if __name__ == "__main__":
-    reset_database()
-    insert_sample_quizzes()
