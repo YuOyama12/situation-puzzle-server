@@ -1,9 +1,9 @@
 
 from typing import List, Optional
+from data.database.tables.quiz import Quiz
 from domain.constants import MAX_QUIZ_COUNT_AS_NEW_ARRIVAL
 from sqlalchemy.ext.asyncio import AsyncSession
 from api.schemas.quiz import PostQuiz
-from api.models.quiz import Quiz
 from data.repository.quiz_repository import QuizRepository
 
 class QuizUseCase:

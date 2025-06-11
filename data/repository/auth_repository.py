@@ -1,9 +1,10 @@
 
 from typing import Optional
 from sqlalchemy import select
-from api.models.user import User
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import HTTPException
+
+from data.database.tables.user import User
 
 class AuthRepository:
     async def create_user(
