@@ -1,6 +1,6 @@
 
 from typing import List, Optional
-from sqlalchemy import asc, desc
+from sqlalchemy import desc
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from fastapi import HTTPException
@@ -28,7 +28,9 @@ class QuizRepository:
         db: AsyncSession,
     ) -> List[Quiz]:
         result = await db.execute(
-            select(Quiz).filter(Quiz.deleted_at.is_(None))
+            select(Quiz)
+            .filter(Quiz.deleted_at.is_(None))
+            .order_by(desc(Quiz.created_at))
         )
         quizzes = result.scalars().all()
 

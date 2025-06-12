@@ -14,15 +14,6 @@ quiz_use_case = QuizUseCase()
 API_QUIZ_TAG = "quiz" 
 
 @router.get(
-        "/quizzes/sample",
-        response_model = List[Quiz],
-        tags = [API_QUIZ_TAG],
-        description = "サンプル問題取得API"
-    )
-async def get_sample_quizzes():
-    return Quiz.samples()
-
-@router.get(
         "/quizzes",
         response_model = List[Quiz],
         tags = [API_QUIZ_TAG],
