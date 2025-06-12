@@ -27,10 +27,16 @@ class QuizUseCase:
         
         return quizzes
 
-    async def post_quiz(self, request: PostQuiz, db: AsyncSession) -> Optional[Quiz]:
+    async def post_quiz(
+        self, 
+        request: PostQuiz,
+        user_id: int,
+        db: AsyncSession
+    ) -> Optional[Quiz]:
         quiz = Quiz(
             title = request.title,
             question = request.question,
-            answer = request.answer
+            answer = request.answer,
+            user_id = user_id,
         )
         return await self.quiz_repository.create_quiz(quiz = quiz, db = db)

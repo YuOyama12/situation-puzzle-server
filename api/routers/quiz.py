@@ -1,9 +1,10 @@
 from typing import List
 from data.database.db import get_db
 from sqlalchemy.ext.asyncio import AsyncSession
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException, Header
 from api.schemas.quiz import *
 from api.schemas.result_response import *
+from domain.constants import ErrorMessages
 from usecase.quiz_use_case import QuizUseCase 
 
 
@@ -59,11 +60,12 @@ async def get_quiz(
     )
 async def post_quiz(
     request_body: PostQuiz,
+    user_id: int = Header(None),
     db: AsyncSession = Depends(get_db)
 ):
-    result = await quiz_use_case.post_quiz(request_body, db = db)
+    if (user_id is None):
+        raise HTTPException(status_code=401, detail=ErrorMessages.AUTH_FAILED)
+    
+    await quiz_use_case.post_quiz(request_body, user_id=user_id, db=db)
 
-    if result is not None:
-        return ResultResponse(code=200, message="OK")
-    else:
-        return ResultResponse(code=500, message="Post Failed")
+    return ResultResponse(code=200, message="投稿が完了しました")

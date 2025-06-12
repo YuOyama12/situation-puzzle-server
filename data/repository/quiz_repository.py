@@ -55,8 +55,12 @@ class QuizRepository:
         quiz: Quiz,
         db: AsyncSession,
     ) -> Optional[Quiz]:
-        db.add(quiz)
-        await db.commit()
-        await db.refresh(quiz)
+        try:
+            db.add(quiz)
+            await db.commit()
+            await db.refresh(quiz)
+        except:
+            db.rollback()
+            raise HTTPException(status_code=500)
 
         return quiz
