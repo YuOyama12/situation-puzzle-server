@@ -18,7 +18,7 @@ API_QUIZ_TAG = "quiz"
         "/quizzes",
         response_model = List[Quiz],
         tags = [API_QUIZ_TAG],
-        description = "投稿済み問題取得API"
+        description = "問題一覧取得API"
     )
 async def get_quizzes(
     db: AsyncSession = Depends(get_db)
@@ -30,7 +30,7 @@ async def get_quizzes(
         "/my-quizzes",
         response_model = List[Quiz],
         tags = [API_QUIZ_TAG],
-        description = "ユーザー投稿済み問題取得API"
+        description = "自分の投稿済問題一覧取得API"
     )
 async def get_my_quizzes(
     user_id: int = Header(None),
