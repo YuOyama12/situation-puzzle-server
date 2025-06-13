@@ -11,10 +11,13 @@ class QuizUseCase:
         self.quiz_repository = QuizRepository()
 
     async def fetch_quiz_by_id(self, id: str, db: AsyncSession) -> Optional[Quiz]:
-        return await self.quiz_repository.fetch_quiz_by_id(id = id, db = db)
+        return await self.quiz_repository.fetch_quiz_by_id(id=id, db=db)
 
     async def fetch_quizzes(self, db: AsyncSession) -> List[Quiz]:
-        return await self.quiz_repository.fetch_all_quizzes(db = db)
+        return await self.quiz_repository.fetch_all_quizzes(db=db)
+    
+    async def fetch_quizzes_by_user_id(self, user_id: int, db: AsyncSession) -> List[Quiz]:
+        return await self.quiz_repository.fetch_quizzes_by_user_id(user_id=user_id, db=db)
     
     async def fetch_new_arrived_quizzes(self, db: AsyncSession) -> List[Quiz]:
         quizzes = await self.quiz_repository.fetch_new_arrived_quizzes(

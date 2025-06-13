@@ -36,6 +36,21 @@ class QuizRepository:
 
         return quizzes
     
+    async def fetch_quizzes_by_user_id(
+        self,
+        user_id: int,
+        db: AsyncSession,
+    ) -> List[Quiz]:
+        result = await db.execute(
+            select(Quiz)
+            .filter(Quiz.deleted_at.is_(None))
+            .filter(Quiz.user_id == user_id)
+            .order_by(desc(Quiz.created_at))
+        )
+        quizzes = result.scalars().all()
+
+        return quizzes
+    
     async def fetch_new_arrived_quizzes(
         self,
         db: AsyncSession,
