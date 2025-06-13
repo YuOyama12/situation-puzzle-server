@@ -18,12 +18,28 @@ API_QUIZ_TAG = "quiz"
         "/quizzes",
         response_model = List[Quiz],
         tags = [API_QUIZ_TAG],
-        description = "投稿済み問題取得API"
+        description = "問題一覧取得API"
     )
 async def get_quizzes(
     db: AsyncSession = Depends(get_db)
 ):
     result = await quiz_use_case.fetch_quizzes(db)
+    return result
+
+@router.get(
+        "/my-quizzes",
+        response_model = List[Quiz],
+        tags = [API_QUIZ_TAG],
+        description = "自分の投稿済問題一覧取得API"
+    )
+async def get_my_quizzes(
+    user_id: int = Header(None),
+    db: AsyncSession = Depends(get_db)
+):
+    if (user_id is None):
+        return []
+    
+    result = await quiz_use_case.fetch_quizzes_by_user_id(user_id=user_id, db=db)
     return result
 
 @router.get(

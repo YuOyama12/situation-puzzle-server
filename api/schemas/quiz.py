@@ -6,6 +6,7 @@ class Quiz(BaseModel):
     title: str
     question: str
     answer: str
+    user_id: int
     created_at: datetime
     updated_at: datetime
 
