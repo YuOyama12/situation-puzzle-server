@@ -1,18 +1,14 @@
-from fastapi.testclient import TestClient
 from httpx import AsyncClient
 import pytest
 
 from api.schemas.auth import LoginRequest
 
-client = AsyncClient(base_url="http://localhost:8000/")
-
 @pytest.mark.asyncio
-async def test_login_failed():
+async def test_login_failed(async_client: AsyncClient):
     request = LoginRequest(user_name="dummy", password="dummyPassword")
-    response = await client.post(
+    response = await async_client.post(
         url="/login",
         content=request.model_dump_json()
     )
 
     assert response.status_code == 401
-
