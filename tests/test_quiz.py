@@ -3,6 +3,7 @@ import pytest
 
 from api.schemas.quiz import Quiz
 from domain.constants import ErrorMessages
+from tests.conftest import get_error_json
 
 @pytest.mark.asyncio
 async def test_get_quizzes(async_client: AsyncClient):
@@ -25,5 +26,5 @@ async def test_get_quizz_by_id_not_found(async_client: AsyncClient):
         url=f"/quizzes/{target_id}",
     )
     assert response.status_code == 404
-    assert response.json() == {"detail": ErrorMessages.QUIZ_NOT_FOUND}
+    assert response.json() == get_error_json(ErrorMessages.QUIZ_NOT_FOUND)
 

@@ -3,6 +3,7 @@ import pytest
 
 from api.schemas.auth import AuthResponse, LoginRequest, SignUpRequest
 from domain.constants import ErrorMessages
+from tests.conftest import get_error_json
 
 dummy_signup_request = SignUpRequest(
     user_name="dummy_new_user",
@@ -54,4 +55,4 @@ async def test_signup_duplicate(async_client: AsyncClient):
     )
 
     assert response.status_code == 400
-    assert response.json() == {"detail": ErrorMessages.USER_NAME_DUPLICATION}
+    assert response.json() == get_error_json(ErrorMessages.USER_NAME_DUPLICATION)
