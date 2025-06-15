@@ -46,6 +46,7 @@ async def test_login_failed(async_client: AsyncClient):
     )
 
     assert response.status_code == 401
+    assert response.json() == get_error_json(ErrorMessages.LOGIN_FAILED)
 
 @pytest.mark.asyncio
 async def test_signup_duplicate(async_client: AsyncClient):
