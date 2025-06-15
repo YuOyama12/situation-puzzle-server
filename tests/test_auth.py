@@ -23,7 +23,7 @@ async def test_signup_success(async_client: AsyncClient):
     assert AuthResponse.model_validate(response.json()).display_name == dummy_signup_request.nickname
 
 @pytest.mark.asyncio
-async def login_success(async_client: AsyncClient):
+async def test_login_success(async_client: AsyncClient):
     request = LoginRequest(
         user_name=dummy_signup_request.user_name,
         password=dummy_signup_request.password
