@@ -1,7 +1,5 @@
 from fastapi import FastAPI
 
-app = FastAPI()
-
 from api.routers import auth, quiz
 
 app = FastAPI()
