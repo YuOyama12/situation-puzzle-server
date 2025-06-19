@@ -27,7 +27,7 @@ async def get_quizzes(
     return result
 
 @router.get(
-        "/my-quizzes",
+        "/my_quizzes",
         response_model = List[Quiz],
         tags = [API_QUIZ_TAG],
         description = "自分の投稿済問題一覧取得API"
