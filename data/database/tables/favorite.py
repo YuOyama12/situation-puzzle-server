@@ -1,5 +1,5 @@
 from .core import TimestampMixin
-from sqlalchemy import BIGINT, Column, String, UniqueConstraint
+from sqlalchemy import BIGINT, Column, ForeignKey, String, UniqueConstraint
 from data.database.db import Base
 
 import uuid
@@ -13,5 +13,5 @@ class Favorite(Base, TimestampMixin):
     
 
     id = Column(String(36), primary_key=True, default=uuid.uuid4)
-    user_id = Column(BIGINT, default=0, nullable=False)
-    quiz_id = Column(String(36), nullable=False)
+    user_id = Column(BIGINT, ForeignKey("users.id", ondelete="CASCADE"), default=0, nullable=False)
+    quiz_id = Column(String(36), ForeignKey("quizzes.id", ondelete="CASCADE"), nullable=False)
