@@ -3,6 +3,7 @@ from typing import List, Optional
 from sqlalchemy import desc
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
+from sqlalchemy.orm import selectinload
 from fastapi import HTTPException
 from data.database.tables.quiz import Quiz
 from domain.constants import ErrorMessages
@@ -29,6 +30,7 @@ class QuizRepository:
     ) -> List[Quiz]:
         result = await db.execute(
             select(Quiz)
+            .options(selectinload(Quiz.favorites))
             .filter(Quiz.deleted_at.is_(None))
             .order_by(desc(Quiz.created_at))
         )
