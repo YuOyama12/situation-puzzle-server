@@ -3,8 +3,9 @@ from typing import List, Optional
 from sqlalchemy import desc
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
-from sqlalchemy.orm import selectinload
+from sqlalchemy.orm import selectinload, joinedload
 from fastapi import HTTPException
+from data.database.tables.favorite import Favorite
 from data.database.tables.quiz import Quiz
 from domain.constants import ErrorMessages
 
@@ -53,6 +54,24 @@ class QuizRepository:
             .order_by(desc(Quiz.created_at))
         )
         quizzes = result.scalars().all()
+
+        return quizzes
+    
+    async def fetch_favorite_quizzes_by_user_id(
+        self,
+        user_id: int,
+        db: AsyncSession,
+    ) -> List[Quiz]:
+        result = await db.execute(
+            select(Quiz)
+            .options(selectinload(Quiz.favorites)) 
+            .join(Favorite, Quiz.id == Favorite.quiz_id)
+            .filter(Quiz.deleted_at.is_(None))
+            .filter(Favorite.user_id == user_id)
+            .order_by(desc(Quiz.created_at))
+        )
+
+        quizzes = result.scalars().unique().all()
 
         return quizzes
     

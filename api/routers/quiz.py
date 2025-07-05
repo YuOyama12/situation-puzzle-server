@@ -57,6 +57,22 @@ async def get_new_arrived_quizzes(
     return result
 
 @router.get(
+        "/quizzes/my_favorites",
+        response_model = List[Quiz],
+        tags = [API_QUIZ_TAG],
+        description = "自分のお気に入り済み問題一覧取得API"
+    )
+async def get_my_favorite_quizzes(
+    user_id: int = Header(None),
+    db: AsyncSession = Depends(get_db)
+):
+    if (user_id is None):
+        return []
+    
+    result = await quiz_use_case.fetch_favorite_quizzes_by_user_id(user_id=user_id, db=db)
+    return result
+
+@router.get(
         "/quizzes/{quiz_id}",
         response_model = Quiz,
         tags = [API_QUIZ_TAG],
