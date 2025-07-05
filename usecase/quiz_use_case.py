@@ -10,17 +10,19 @@ class QuizUseCase:
     def __init__(self):
         self.quiz_repository = QuizRepository()
 
-    async def fetch_quiz_by_id(self, id: str, db: AsyncSession) -> Optional[Quiz]:
-        return await self.quiz_repository.fetch_quiz_by_id(id=id, db=db)
+    async def fetch_quiz_by_id(self, id: str, user_id: Optional[int], db: AsyncSession) -> Optional[Quiz]:
+        quiz = await self.quiz_repository.fetch_quiz_by_id(id=id, db=db)
+        return Quiz.create(quiz_model=quiz, user_id=user_id)
 
-    async def fetch_quizzes(self, db: AsyncSession) -> List[Quiz]:
+    async def fetch_quizzes(self, user_id: Optional[int], db: AsyncSession) -> List[Quiz]:
         quizzes = await self.quiz_repository.fetch_all_quizzes(db=db)
-        return self._convert_to_quiz_schemas(quizzes=quizzes, user_id=None)
+        return self._convert_to_quiz_schemas(quizzes=quizzes, user_id=user_id)
     
     async def fetch_quizzes_by_user_id(self, user_id: int, db: AsyncSession) -> List[Quiz]:
-        return await self.quiz_repository.fetch_quizzes_by_user_id(user_id=user_id, db=db)
+        quizzes = await self.quiz_repository.fetch_quizzes_by_user_id(user_id=user_id, db=db)
+        return self._convert_to_quiz_schemas(quizzes=quizzes, user_id=user_id)
     
-    async def fetch_new_arrived_quizzes(self, db: AsyncSession) -> List[Quiz]:
+    async def fetch_new_arrived_quizzes(self, user_id: Optional[int], db: AsyncSession) -> List[Quiz]:
         quizzes = await self.quiz_repository.fetch_new_arrived_quizzes(
             db=db,
             quiz_count=MAX_QUIZ_COUNT_AS_NEW_ARRIVAL
@@ -29,7 +31,7 @@ class QuizUseCase:
         if not quizzes:
             return []
         
-        return quizzes
+        return self._convert_to_quiz_schemas(quizzes=quizzes, user_id=user_id)
 
     async def post_quiz(
         self, 

@@ -21,9 +21,10 @@ API_QUIZ_TAG = "quiz"
         description = "問題一覧取得API"
     )
 async def get_quizzes(
+    user_id: int = Header(None),
     db: AsyncSession = Depends(get_db)
 ):
-    result = await quiz_use_case.fetch_quizzes(db)
+    result = await quiz_use_case.fetch_quizzes(db=db, user_id=user_id)
     return result
 
 @router.get(
@@ -49,9 +50,10 @@ async def get_my_quizzes(
         description = "新着問題取得API"
     )
 async def get_new_arrived_quizzes(
+    user_id: int = Header(None),
     db: AsyncSession = Depends(get_db)
 ):
-    result = await quiz_use_case.fetch_new_arrived_quizzes(db)
+    result = await quiz_use_case.fetch_new_arrived_quizzes(user_id=user_id, db=db)
     return result
 
 @router.get(
@@ -62,9 +64,10 @@ async def get_new_arrived_quizzes(
     )
 async def get_quiz(
     quiz_id: str,
+    user_id: int = Header(None),
     db: AsyncSession = Depends(get_db)
 ):
-    result = await quiz_use_case.fetch_quiz_by_id(id = quiz_id, db = db)
+    result = await quiz_use_case.fetch_quiz_by_id(id =quiz_id, user_id=user_id, db=db)
     return result
 
 

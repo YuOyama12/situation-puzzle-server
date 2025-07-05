@@ -15,7 +15,9 @@ class QuizRepository:
         db: AsyncSession,
     ) -> Optional[Quiz]:
         result = await db.execute(
-            select(Quiz).filter(Quiz.id == id, Quiz.deleted_at.is_(None))
+            select(Quiz)
+            .options(selectinload(Quiz.favorites))
+            .filter(Quiz.id == id, Quiz.deleted_at.is_(None))
         )
         quiz = result.scalar_one_or_none()
 
@@ -45,6 +47,7 @@ class QuizRepository:
     ) -> List[Quiz]:
         result = await db.execute(
             select(Quiz)
+            .options(selectinload(Quiz.favorites))
             .filter(Quiz.deleted_at.is_(None))
             .filter(Quiz.user_id == user_id)
             .order_by(desc(Quiz.created_at))
@@ -60,6 +63,7 @@ class QuizRepository:
     ) -> List[Quiz]:
         result = await db.execute(
             select(Quiz)
+            .options(selectinload(Quiz.favorites))
             .filter(Quiz.deleted_at.is_(None))
             .order_by(desc(Quiz.created_at))
             .limit(quiz_count)
