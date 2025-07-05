@@ -1,5 +1,6 @@
 from .core import TimestampMixin
 from sqlalchemy import BIGINT, Column, String, Text
+from sqlalchemy.orm import relationship
 from data.database.db import Base
 
 import uuid
@@ -12,3 +13,5 @@ class Quiz(Base, TimestampMixin):
     title = Column(String(24))
     question = Column(Text)
     answer = Column(Text)
+
+    favorites = relationship("Favorite")
