@@ -1,10 +1,12 @@
 
 from typing import Optional
+
+from fastapi import HTTPException
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
-from fastapi import HTTPException
 
 from data.database.tables.user import User
+
 
 class AuthRepository:
     async def create_user(

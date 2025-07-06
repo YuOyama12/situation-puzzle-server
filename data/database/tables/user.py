@@ -1,6 +1,9 @@
-from .core import TimestampMixin
-from sqlalchemy import Column, String, BIGINT, LargeBinary
+from sqlalchemy import BIGINT, Column, LargeBinary, String
+
 from data.database.db import Base
+
+from .core import TimestampMixin
+
 
 class User(Base, TimestampMixin):
     __tablename__ = "users"

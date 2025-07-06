@@ -1,13 +1,16 @@
 
 from typing import List, Optional
+
+from fastapi import HTTPException
 from sqlalchemy import desc
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
-from sqlalchemy.orm import selectinload, joinedload
-from fastapi import HTTPException
+from sqlalchemy.orm import selectinload
+
 from data.database.tables.favorite import Favorite
 from data.database.tables.quiz import Quiz
 from domain.constants import ErrorMessages
+
 
 class QuizRepository:
     async def fetch_quiz_by_id(

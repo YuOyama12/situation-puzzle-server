@@ -1,9 +1,12 @@
-from .core import TimestampMixin
+import uuid
+
 from sqlalchemy import BIGINT, Column, String, Text
 from sqlalchemy.orm import relationship
+
 from data.database.db import Base
 
-import uuid
+from .core import TimestampMixin
+
 
 class Quiz(Base, TimestampMixin):
     __tablename__ = "quizzes"

@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 
+
 class SignUpRequest(BaseModel):
     user_name: str
     nickname: str
