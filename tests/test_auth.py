@@ -1,5 +1,5 @@
-from httpx import AsyncClient
 import pytest
+from httpx import AsyncClient
 
 from api.schemas.auth import AuthResponse, LoginRequest, SignUpRequest
 from domain.constants import ErrorMessages

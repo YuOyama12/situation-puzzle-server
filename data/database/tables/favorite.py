@@ -1,8 +1,11 @@
-from .core import TimestampMixin
+import uuid
+
 from sqlalchemy import BIGINT, Column, ForeignKey, String, UniqueConstraint
+
 from data.database.db import Base
 
-import uuid
+from .core import TimestampMixin
+
 
 class Favorite(Base, TimestampMixin):
     __tablename__ = "favorites"

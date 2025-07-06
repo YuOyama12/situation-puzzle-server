@@ -1,6 +1,7 @@
 import pytest
 from httpx import AsyncClient
 
+
 def get_error_json(
     message: str,
 ):

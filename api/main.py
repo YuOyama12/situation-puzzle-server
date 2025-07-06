@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 
-from api.routers import auth, quiz, favorite
+from api.routers import auth, favorite, quiz
 
 app = FastAPI()
 app.include_router(quiz.router)

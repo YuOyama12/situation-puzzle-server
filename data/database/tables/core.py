@@ -1,6 +1,8 @@
-from domain.utils import get_datetime_as_jst
 from sqlalchemy import Column, DateTime
 from sqlalchemy.ext.declarative import declared_attr
+
+from domain.utils import get_datetime_as_jst
+
 
 class TimestampMixin(object):
     @declared_attr

@@ -1,11 +1,13 @@
 
 from typing import Optional
+
 from fastapi import HTTPException
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from data.database.tables.favorite import Favorite
 from domain.constants import ErrorMessages
+
 
 class FavoriteRepository:
     async def add_favorite(

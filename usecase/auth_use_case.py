@@ -1,11 +1,13 @@
 
+import bcrypt
 from fastapi import HTTPException
+from sqlalchemy.ext.asyncio import AsyncSession
+
 from api.schemas.auth import LoginRequest
 from data.database.tables.user import User
 from data.repository.auth_repository import AuthRepository
-from sqlalchemy.ext.asyncio import AsyncSession
-import bcrypt
 from domain.constants import ErrorMessages
+
 
 class AuthUseCase:
     def __init__(self):

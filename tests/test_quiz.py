@@ -1,12 +1,14 @@
 from typing import List
+
+import pytest
 from httpx import AsyncClient
 from pydantic import TypeAdapter
-import pytest
 
 from api.schemas.quiz import Quiz
 from data.database.seeders.constants import SAMPLE_QUIZ_ID, SAMPLE_QUIZ_USER_ID
 from domain.constants import ErrorMessages
 from tests.conftest import get_error_json
+
 
 @pytest.mark.asyncio
 async def test_get_quizzes(async_client: AsyncClient):

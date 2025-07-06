@@ -1,11 +1,11 @@
-from api.schemas.auth import AuthResponse, LoginRequest, SignUpRequest
-from data.database.db import get_db
-from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import APIRouter, Depends
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from api.schemas.auth import AuthResponse, LoginRequest, SignUpRequest
 from api.schemas.quiz import *
 from api.schemas.result_response import *
+from data.database.db import get_db
 from usecase.auth_use_case import AuthUseCase
-
 
 router = APIRouter()
 

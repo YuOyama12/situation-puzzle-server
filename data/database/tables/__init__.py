@@ -1,4 +1,4 @@
 from .core import *
-from .user import User
-from .quiz import Quiz
 from .favorite import Favorite
+from .quiz import Quiz
+from .user import User

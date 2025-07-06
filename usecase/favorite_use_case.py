@@ -1,7 +1,9 @@
 
-from data.database.tables.favorite import Favorite
 from sqlalchemy.ext.asyncio import AsyncSession
+
+from data.database.tables.favorite import Favorite
 from data.repository.favorite_repository import FavoriteRepository
+
 
 class FavoriteUseCase:
     def __init__(self):

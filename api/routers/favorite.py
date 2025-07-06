@@ -1,11 +1,11 @@
-from data.database.db import get_db
+from fastapi import APIRouter, Depends, Header, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
-from fastapi import APIRouter, Depends, HTTPException, Header
+
 from api.schemas.quiz import *
 from api.schemas.result_response import *
+from data.database.db import get_db
 from domain.constants import ErrorMessages
 from usecase.favorite_use_case import FavoriteUseCase
-
 
 router = APIRouter()
 
